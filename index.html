@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Kids9 — Smart School Transport</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #06090f;
+  --surface: #0d1526;
+  --sky: #38bdf8;
+  --green: #4ade80;
+  --yellow: #fbbf24;
+  --text: #e2e8f0;
+  --muted: #64748b;
+  --card: rgba(15,25,50,0.7);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  overflow-x: hidden;
+}
+
+/* ─── STARFIELD ─── */
+#stars { position:fixed; inset:0; pointer-events:none; z-index:0; }
+.star {
+  position:absolute;
+  width:2px; height:2px;
+  background:#fff;
+  border-radius:50%;
+  animation: twinkle var(--d,3s) ease-in-out infinite;
+  opacity:0;
+}
+@keyframes twinkle {
+  0%,100%{opacity:0} 50%{opacity:var(--o,.8)}
+}
+
+/* ─── NAV ─── */
+header {
+  position:fixed; width:100%; top:0; z-index:100;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:18px 60px;
+  background:rgba(6,9,15,0.6);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(56,189,248,0.08);
+}
+.logo {
+  font-family:'Nunito',sans-serif;
+  font-size:28px; font-weight:900;
+  background:linear-gradient(90deg,#38bdf8,#4ade80);
+  -webkit-background-clip:text; color:transparent;
+  letter-spacing:-0.5px;
+}
+nav { display:flex; gap:36px; align-items:center; }
+nav a {
+  text-decoration:none; color:#94a3b8;
+  font-weight:500; font-size:15px;
+  transition:color .2s;
+  position:relative;
+}
+nav a::after {
+  content:"";
+  position:absolute; bottom:-4px; left:0;
+  width:0; height:2px;
+  background:var(--sky);
+  border-radius:2px;
+  transition:width .3s;
+}
+nav a:hover { color:#fff; }
+nav a:hover::after { width:100%; }
+.nav-cta {
+  padding:9px 22px;
+  background:var(--sky);
+  color:#000 !important;
+  border-radius:30px;
+  font-weight:700;
+  transition:box-shadow .3s, transform .2s !important;
+}
+.nav-cta::after { display:none !important; }
+.nav-cta:hover { transform:scale(1.05) !important; box-shadow:0 0 20px rgba(56,189,248,.5); }
+
+/* ─── HERO ─── */
+.hero {
+  position:relative;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  text-align:center;
+  padding:120px 20px 80px;
+  overflow:hidden;
+}
+
+/* Road scene at bottom */
+.road-scene {
+  position:absolute;
+  bottom:0; left:0; right:0;
+  height:220px;
+  pointer-events:none;
+}
+
+/* Glow orbs */
+.orb {
+  position:absolute;
+  border-radius:50%;
+  filter:blur(80px);
+  opacity:.25;
+  pointer-events:none;
+}
+.orb1 { width:500px;height:500px; background:#38bdf8; top:-100px; left:-200px; }
+.orb2 { width:400px;height:400px; background:#4ade80; top:40%; right:-150px; }
+.orb3 { width:300px;height:300px; background:#818cf8; bottom:0; left:40%; }
+
+.badge {
+  display:inline-flex; align-items:center; gap:8px;
+  padding:6px 16px;
+  background:rgba(56,189,248,.1);
+  border:1px solid rgba(56,189,248,.3);
+  border-radius:30px;
+  font-size:13px; color:var(--sky);
+  margin-bottom:28px;
+  animation:fadeUp .8s ease both;
+}
+.badge span { width:8px;height:8px;background:var(--sky);border-radius:50%; animation:pulse 1.5s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(1.5)} }
+
+.hero h1 {
+  font-family:'Nunito',sans-serif;
+  font-size:clamp(42px,7vw,80px);
+  font-weight:900;
+  line-height:1.05;
+  letter-spacing:-2px;
+  margin-bottom:24px;
+  animation:fadeUp .9s .1s ease both;
+}
+.hero h1 span {
+  background:linear-gradient(90deg,#38bdf8 0%,#4ade80 50%,#fbbf24 100%);
+  -webkit-background-clip:text; color:transparent;
+}
+
+.hero p {
+  color:#94a3b8;
+  font-size:18px;
+  max-width:580px;
+  line-height:1.7;
+  margin-bottom:40px;
+  animation:fadeUp 1s .2s ease both;
+}
+
+.hero-btns {
+  display:flex; gap:16px; justify-content:center; flex-wrap:wrap;
+  margin-bottom:60px;
+  animation:fadeUp 1s .3s ease both;
+}
+.btn-primary {
+  padding:14px 34px;
+  background:linear-gradient(135deg,#38bdf8,#4ade80);
+  color:#000; font-weight:800;
+  border:none; border-radius:50px;
+  cursor:pointer; font-size:16px;
+  transition:transform .2s, box-shadow .3s;
+  font-family:'Nunito',sans-serif;
+}
+.btn-primary:hover { transform:scale(1.06); box-shadow:0 12px 35px rgba(56,189,248,.45); }
+.btn-ghost {
+  padding:14px 34px;
+  background:transparent;
+  border:2px solid rgba(56,189,248,.4);
+  color:var(--sky); font-weight:700;
+  border-radius:50px;
+  cursor:pointer; font-size:16px;
+  transition:border-color .2s, background .2s;
+  font-family:'Nunito',sans-serif;
+}
+.btn-ghost:hover { border-color:var(--sky); background:rgba(56,189,248,.08); }
+
+/* STATS */
+.stats {
+  display:flex; gap:48px; justify-content:center; flex-wrap:wrap;
+  animation:fadeUp 1s .4s ease both;
+  margin-bottom:20px;
+}
+.stat { text-align:center; }
+.stat-num {
+  font-family:'Nunito',sans-serif;
+  font-size:34px; font-weight:900;
+  background:linear-gradient(135deg,#38bdf8,#4ade80);
+  -webkit-background-clip:text; color:transparent;
+}
+.stat p { color:#64748b; font-size:13px; margin-top:2px; }
+
+/* ─── SCENE SVG ─── */
+svg.scene { width:100%; max-height:220px; display:block; }
+
+/* ─── FEATURES ─── */
+.features {
+  padding:120px 60px;
+  position:relative; z-index:1;
+}
+.section-label {
+  text-align:center;
+  font-size:12px;
+  letter-spacing:3px;
+  color:var(--sky);
+  text-transform:uppercase;
+  font-weight:700;
+  margin-bottom:12px;
+}
+.section-title {
+  font-family:'Nunito',sans-serif;
+  font-size:clamp(32px,4vw,46px);
+  font-weight:900;
+  text-align:center;
+  margin-bottom:60px;
+  letter-spacing:-1px;
+}
+.features-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:24px;
+  max-width:1100px; margin:0 auto;
+}
+.feat-card {
+  background:var(--card);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:24px;
+  padding:36px 28px;
+  backdrop-filter:blur(12px);
+  transition:transform .35s, box-shadow .35s, border-color .35s;
+  cursor:default;
+  position:relative;
+  overflow:hidden;
+}
+.feat-card::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(56,189,248,.08), transparent 60%);
+  opacity:0;
+  transition:opacity .3s;
+}
+.feat-card:hover::before { opacity:1; }
+.feat-card:hover {
+  transform:translateY(-8px);
+  box-shadow:0 30px 60px rgba(0,0,0,.5);
+  border-color:rgba(56,189,248,.2);
+}
+.feat-icon {
+  width:54px; height:54px;
+  border-radius:16px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:26px;
+  margin-bottom:20px;
+}
+.feat-card h3 {
+  font-family:'Nunito',sans-serif;
+  font-size:20px; font-weight:800;
+  margin-bottom:10px;
+}
+.feat-card p { color:#64748b; line-height:1.65; font-size:15px; }
+
+/* ─── HOW IT WORKS ─── */
+.how {
+  padding:100px 60px;
+  background:linear-gradient(180deg, transparent, rgba(56,189,248,.03), transparent);
+  position:relative; z-index:1;
+}
+.steps {
+  display:flex; gap:0;
+  max-width:900px; margin:0 auto;
+  flex-wrap:wrap;
+  position:relative;
+}
+.steps::before {
+  content:"";
+  position:absolute;
+  top:28px; left:50px; right:50px;
+  height:2px;
+  background:linear-gradient(90deg,#38bdf8,#4ade80,#fbbf24);
+  z-index:0;
+}
+.step {
+  flex:1; min-width:200px;
+  text-align:center; padding:0 20px;
+  position:relative; z-index:1;
+}
+.step-num {
+  width:56px; height:56px;
+  border-radius:50%;
+  border:2px solid var(--sky);
+  background:var(--bg);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Nunito',sans-serif;
+  font-size:20px; font-weight:900;
+  color:var(--sky);
+  margin:0 auto 20px;
+  box-shadow:0 0 20px rgba(56,189,248,.3);
+}
+.step h4 {
+  font-family:'Nunito',sans-serif;
+  font-size:17px; font-weight:800;
+  margin-bottom:8px;
+}
+.step p { color:#64748b; font-size:14px; line-height:1.6; }
+
+/* ─── ABOUT ─── */
+.about {
+  padding:100px 60px;
+  display:flex; align-items:center;
+  gap:80px; flex-wrap:wrap;
+  max-width:1200px; margin:0 auto;
+  position:relative; z-index:1;
+}
+.about-text { flex:1; min-width:300px; }
+.about-text h2 {
+  font-family:'Nunito',sans-serif;
+  font-size:clamp(32px,4vw,46px);
+  font-weight:900;
+  margin-bottom:20px;
+  letter-spacing:-1px;
+  line-height:1.1;
+}
+.about-text p { color:#64748b; line-height:1.8; font-size:16px; margin-bottom:16px; }
+.about-visual {
+  flex:1; min-width:280px;
+  display:flex; justify-content:center;
+}
+.bus-card {
+  background:var(--card);
+  border:1px solid rgba(56,189,248,.15);
+  border-radius:28px;
+  padding:32px;
+  width:320px;
+  backdrop-filter:blur(12px);
+  animation:float 5s ease-in-out infinite;
+}
+.bus-card-top {
+  display:flex; align-items:center; gap:12px;
+  margin-bottom:20px;
+}
+.dot-live { width:10px;height:10px;background:#4ade80;border-radius:50%; animation:pulse 1.5s infinite; }
+.bus-card-top span { font-size:14px; color:#4ade80; font-weight:600; }
+.route-line {
+  display:flex; align-items:center; gap:8px;
+  margin-bottom:12px;
+}
+.route-dot { width:12px;height:12px;border-radius:50%; flex-shrink:0; }
+.route-label { font-size:13px; color:#94a3b8; }
+.route-connector { width:2px; height:28px; background:rgba(56,189,248,.3); margin:0 4px 12px 4px; }
+.bus-emoji { font-size:42px; text-align:center; margin:16px 0; animation:busMove 3s ease-in-out infinite; }
+@keyframes busMove { 0%,100%{transform:translateX(-8px)} 50%{transform:translateX(8px)} }
+.eta-bar {
+  background:rgba(56,189,248,.1);
+  border-radius:10px;
+  padding:12px 16px;
+  display:flex; justify-content:space-between; align-items:center;
+}
+.eta-bar span:first-child { color:#64748b; font-size:13px; }
+.eta-bar strong { color:var(--sky); font-family:'Nunito',sans-serif; font-size:18px; font-weight:900; }
+
+/* ─── CTA ─── */
+.cta {
+  margin:80px 40px;
+  border-radius:32px;
+  padding:80px 40px;
+  text-align:center;
+  background:linear-gradient(135deg,rgba(56,189,248,.15),rgba(74,222,128,.1));
+  border:1px solid rgba(56,189,248,.2);
+  position:relative; z-index:1; overflow:hidden;
+}
+.cta::before {
+  content:"";
+  position:absolute;
+  top:-100px; left:50%; transform:translateX(-50%);
+  width:600px; height:600px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(56,189,248,.12),transparent 70%);
+  pointer-events:none;
+}
+.cta h2 {
+  font-family:'Nunito',sans-serif;
+  font-size:clamp(28px,4vw,48px);
+  font-weight:900;
+  margin-bottom:16px;
+  letter-spacing:-1px;
+}
+.cta p { color:#64748b; max-width:480px; margin:0 auto 36px; font-size:16px; }
+
+footer {
+  text-align:center;
+  padding:40px;
+  color:#334155;
+  font-size:14px;
+  border-top:1px solid rgba(255,255,255,.04);
+}
+footer strong { color:#475569; }
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(30px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes float {
+  0%,100% { transform:translateY(0); }
+  50%      { transform:translateY(-14px); }
+}
+
+/* Scroll reveal */
+.reveal { opacity:0; transform:translateY(40px); transition:opacity .7s ease, transform .7s ease; }
+.reveal.visible { opacity:1; transform:none; }
+
+@media(max-width:768px) {
+  header { padding:16px 24px; }
+  .features { padding:80px 24px; }
+  .how { padding:80px 24px; }
+  .about { padding:80px 24px; gap:40px; }
+  .steps::before { display:none; }
+  .step { margin-bottom:40px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Starfield -->
+<div id="stars"></div>
+
+<!-- Glow orbs -->
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<!-- NAV -->
+<header>
+  <div class="logo">Kids9</div>
+  <nav>
+    <a href="#features">Features</a>
+    <a href="#how">How it works</a>
+    <a href="#about">About</a>
+    <a href="#contact" class="nav-cta">Get Started</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="badge"><span></span> Trusted by 500+ Schools Across India</div>
+
+  <h1>Every Child Deserves<br><span>a Safe Journey</span></h1>
+
+  <p>Kids9 tracks school buses and vans in real-time so parents always know where their child is — and schools can ensure every student gets home safe.</p>
+
+  <div class="hero-btns">
+    <button class="btn-primary">Get Started Free</button>
+    <button class="btn-ghost">See How It Works</button>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-num" data-target="10000">0</div>
+      <p>Students Safe Daily</p>
+    </div>
+    <div class="stat">
+      <div class="stat-num" data-target="500">0</div>
+      <p>Buses Tracked</p>
+    </div>
+    <div class="stat">
+      <div class="stat-num" data-target="99.9" data-suffix="%">0</div>
+      <p>Safety Reliability</p>
+    </div>
+    <div class="stat">
+      <div class="stat-num" data-target="50" data-suffix="+" >0</div>
+      <p>Cities Covered</p>
+    </div>
+  </div>
+</section>
+
+<!-- ANIMATED ROAD SCENE -->
+<div style="position:relative;z-index:1;overflow:hidden;height:160px;background:linear-gradient(180deg,transparent,#0a1020)">
+<svg viewBox="0 0 1400 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+  <!-- Sky gradient -->
+  <defs>
+    <linearGradient id="roadGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0b1220" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="roadSurface" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Ground -->
+  <rect x="0" y="100" width="1400" height="60" fill="url(#roadSurface)"/>
+  <!-- Road markings -->
+  <rect x="0" y="126" width="1400" height="8" fill="#1e293b"/>
+  <!-- Dashes -->
+  <g fill="rgba(251,191,36,0.5)">
+    <rect x="0" y="128" width="80" height="4" rx="2"/>
+    <rect x="130" y="128" width="80" height="4" rx="2"/>
+    <rect x="260" y="128" width="80" height="4" rx="2"/>
+    <rect x="390" y="128" width="80" height="4" rx="2"/>
+    <rect x="520" y="128" width="80" height="4" rx="2"/>
+    <rect x="650" y="128" width="80" height="4" rx="2"/>
+    <rect x="780" y="128" width="80" height="4" rx="2"/>
+    <rect x="910" y="128" width="80" height="4" rx="2"/>
+    <rect x="1040" y="128" width="80" height="4" rx="2"/>
+    <rect x="1170" y="128" width="80" height="4" rx="2"/>
+    <rect x="1300" y="128" width="80" height="4" rx="2"/>
+  </g>
+
+  <!-- Animated Bus -->
+  <g id="busGroup">
+    <animateTransform attributeName="transform" type="translate" values="-220,0;1450,0" dur="12s" repeatCount="indefinite" additive="sum"/>
+    <!-- Bus body -->
+    <rect x="0" y="62" width="160" height="52" rx="8" fill="#fbbf24"/>
+    <!-- Windows -->
+    <rect x="18" y="72" width="22" height="16" rx="3" fill="rgba(56,189,248,0.8)"/>
+    <rect x="50" y="72" width="22" height="16" rx="3" fill="rgba(56,189,248,0.8)"/>
+    <rect x="82" y="72" width="22" height="16" rx="3" fill="rgba(56,189,248,0.8)"/>
+    <rect x="114" y="72" width="22" height="16" rx="3" fill="rgba(56,189,248,0.8)"/>
+    <!-- Door -->
+    <rect x="135" y="76" width="16" height="22" rx="2" fill="#d97706"/>
+    <!-- Wheels -->
+    <circle cx="30" cy="116" r="14" fill="#1e293b"/>
+    <circle cx="30" cy="116" r="8" fill="#374151"/>
+    <circle cx="130" cy="116" r="14" fill="#1e293b"/>
+    <circle cx="130" cy="116" r="8" fill="#374151"/>
+    <!-- Headlight -->
+    <rect x="152" y="76" width="10" height="8" rx="2" fill="#fef08a"/>
+    <!-- KIDS9 text -->
+    <text x="55" y="92" font-family="Nunito,sans-serif" font-weight="900" font-size="11" fill="#78350f">KIDS9</text>
+    <!-- Exhaust puffs -->
+    <circle cx="-12" cy="90" r="6" fill="rgba(148,163,184,0.3)">
+      <animate attributeName="cx" values="-12;-40" dur="1s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.5;0" dur="1s" repeatCount="indefinite"/>
+      <animate attributeName="r" values="6;14" dur="1s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- Kids walking on road edge -->
+  <!-- Kid 1 -->
+  <g transform="translate(300,68)">
+    <circle cx="0" cy="0" r="9" fill="#fcd34d"/>  <!-- head -->
+    <rect x="-7" y="9" width="14" height="20" rx="4" fill="#60a5fa"/>  <!-- body -->
+    <rect x="-12" y="9" width="6" height="12" rx="3" fill="#60a5fa"/>  <!-- arm -->
+    <rect x="7" y="9" width="6" height="12" rx="3" fill="#60a5fa"/>
+    <rect x="-6" y="28" width="5" height="14" rx="3" fill="#1e40af"/>  <!-- legs -->
+    <rect x="2" y="28" width="5" height="14" rx="3" fill="#1e40af"/>
+    <!-- Bag -->
+    <rect x="7" y="10" width="10" height="13" rx="3" fill="#f97316"/>
+    <animateTransform attributeName="transform" type="translate" values="300,68;330,68" dur="4s" repeatCount="indefinite" additive="replace"/>
+  </g>
+
+  <!-- Kid 2 -->
+  <g transform="translate(900,65)">
+    <circle cx="0" cy="0" r="9" fill="#fca5a5"/>
+    <rect x="-7" y="9" width="14" height="20" rx="4" fill="#a78bfa"/>
+    <rect x="-12" y="9" width="6" height="14" rx="3" fill="#a78bfa"/>
+    <rect x="7" y="9" width="6" height="14" rx="3" fill="#a78bfa"/>
+    <rect x="-6" y="28" width="5" height="14" rx="3" fill="#5b21b6"/>
+    <rect x="2" y="28" width="5" height="14" rx="3" fill="#5b21b6"/>
+    <!-- Pigtails -->
+    <circle cx="-9" cy="-5" r="4" fill="#fca5a5"/>
+    <circle cx="9" cy="-5" r="4" fill="#fca5a5"/>
+    <!-- Bag -->
+    <rect x="-17" y="10" width="10" height="13" rx="3" fill="#4ade80"/>
+    <animateTransform attributeName="transform" type="translate" values="900,65;870,65" dur="5s" repeatCount="indefinite" additive="replace"/>
+  </g>
+
+  <!-- Trees in bg -->
+  <g opacity="0.4">
+    <rect x="200" y="50" width="6" height="50" fill="#374151"/>
+    <polygon points="203,10 220,55 186,55" fill="#166534"/>
+    <rect x="700" y="45" width="6" height="55" fill="#374151"/>
+    <polygon points="703,5 724,50 682,50" fill="#166534"/>
+    <rect x="1100" y="48" width="6" height="52" fill="#374151"/>
+    <polygon points="1103,8 1122,53 1084,53" fill="#166534"/>
+  </g>
+
+  <rect x="0" y="0" width="1400" height="160" fill="url(#roadGrad)"/>
+</svg>
+</div>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <p class="section-label reveal">What We Offer</p>
+  <h2 class="section-title reveal">Built for Safety, <span style="background:linear-gradient(90deg,#38bdf8,#4ade80);-webkit-background-clip:text;color:transparent">Designed for Trust</span></h2>
+
+  <div class="features-grid">
+    <div class="feat-card reveal">
+      <div class="feat-icon" style="background:rgba(56,189,248,.1)">📍</div>
+      <h3>Live GPS Tracking</h3>
+      <p>Real-time bus location on a map — parents know exactly where the bus is, every minute of the journey.</p>
+    </div>
+    <div class="feat-card reveal">
+      <div class="feat-icon" style="background:rgba(74,222,128,.1)">🔔</div>
+      <h3>Smart Alerts</h3>
+      <p>Instant notifications the moment your child boards or exits the bus — no guessing, no anxiety.</p>
+    </div>
+    <div class="feat-card reveal">
+      <div class="feat-icon" style="background:rgba(251,191,36,.1)">🛡️</div>
+      <h3>Driver Monitoring</h3>
+      <p>Speed alerts, route deviation warnings, and driver behavior tracking ensure responsible driving.</p>
+    </div>
+    <div class="feat-card reveal">
+      <div class="feat-icon" style="background:rgba(129,140,248,.1)">📊</div>
+      <h3>School Dashboard</h3>
+      <p>A powerful admin panel for schools to manage fleets, view analytics, and communicate with parents.</p>
+    </div>
+    <div class="feat-card reveal">
+      <div class="feat-icon" style="background:rgba(244,114,182,.1)">📱</div>
+      <h3>Parent App</h3>
+      <p>Simple, beautiful mobile app for parents to track buses, receive alerts, and stay connected.</p>
+    </div>
+    <div class="feat-card reveal">
+      <div class="feat-icon" style="background:rgba(56,189,248,.1)">🚨</div>
+      <h3>SOS & Emergency</h3>
+      <p>One-tap emergency alerts from drivers connect schools and parents instantly in any critical situation.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <p class="section-label reveal">Simple Process</p>
+  <h2 class="section-title reveal">How Kids9 Works</h2>
+  <div class="steps">
+    <div class="step reveal">
+      <div class="step-num">1</div>
+      <h4>School Registers</h4>
+      <p>Your school signs up and adds buses, vans, routes, and driver details in minutes.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">2</div>
+      <h4>Parents Get Access</h4>
+      <p>Parents download the app and are linked to their child's bus with a simple code.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">3</div>
+      <h4>Track Live</h4>
+      <p>Every journey is tracked in real-time with GPS and shared instantly with parents.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">4</div>
+      <h4>Stay Notified</h4>
+      <p>Automated alerts for pickup, dropoff, delays, and any safety concerns — always informed.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section style="position:relative;z-index:1;padding:40px 0">
+  <div class="about" id="about">
+    <div class="about-text reveal">
+      <p class="section-label" style="text-align:left;margin-bottom:12px">Our Mission</p>
+      <h2>We Make Every<br>School Run Safe</h2>
+      <p>Kids9 was built by parents, for parents. We know the anxiety of waiting for your child to come home — so we built a system that eliminates it entirely.</p>
+      <p>By combining GPS hardware, a cloud platform, and a parent-first mobile app, we give schools full transparency and parents total peace of mind.</p>
+      <button class="btn-primary" style="margin-top:20px;font-size:15px;padding:12px 28px">Learn Our Story →</button>
+    </div>
+    <div class="about-visual reveal">
+      <div class="bus-card">
+        <div class="bus-card-top">
+          <div class="dot-live"></div>
+          <span>Bus #KA-07 is Live</span>
+        </div>
+        <div style="font-size:11px;color:#475569;margin-bottom:12px;letter-spacing:1px;text-transform:uppercase">Today's Route</div>
+        <div class="route-line">
+          <div class="route-dot" style="background:#4ade80"></div>
+          <span class="route-label">Whitefield School Depot</span>
+        </div>
+        <div class="route-connector" style="margin-left:5px"></div>
+        <div class="route-line">
+          <div class="route-dot" style="background:#38bdf8;animation:pulse 1.5s infinite"></div>
+          <span class="route-label" style="color:#38bdf8">Koramangala Stop ← <em>Now</em></span>
+        </div>
+        <div class="route-connector" style="margin-left:5px;background:rgba(100,116,139,.3)"></div>
+        <div class="route-line">
+          <div class="route-dot" style="background:#475569"></div>
+          <span class="route-label" style="color:#475569">HSR Layout Drop</span>
+        </div>
+        <div class="bus-emoji">🚌</div>
+        <div class="eta-bar">
+          <span>Arriving at your stop</span>
+          <strong>8 min</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta reveal" id="contact">
+  <h2>Ready to Make Your<br>School Safer?</h2>
+  <p>Join hundreds of schools already using Kids9 to give parents peace of mind and students a safe commute.</p>
+  <div class="hero-btns">
+    <button class="btn-primary">Start Free Trial</button>
+    <button class="btn-ghost">Talk to Sales</button>
+  </div>
+</section>
+
+<footer>
+  <strong>Kids9</strong> — Smart School Transport &nbsp;·&nbsp; © 2026 All rights reserved &nbsp;·&nbsp; Made with ❤️ for every child's safety
+</footer>
+
+<script>
+// Starfield
+const stars = document.getElementById('stars');
+for(let i=0;i<120;i++){
+  const s = document.createElement('div');
+  s.className = 'star';
+  s.style.cssText = `
+    left:${Math.random()*100}%;
+    top:${Math.random()*100}%;
+    --d:${2+Math.random()*5}s;
+    --o:${0.3+Math.random()*0.7};
+    animation-delay:${Math.random()*5}s;
+  `;
+  stars.appendChild(s);
+}
+
+// Counter animation
+function animateCounters() {
+  document.querySelectorAll('.stat-num[data-target]').forEach(el => {
+    const target = parseFloat(el.dataset.target);
+    const suffix = el.dataset.suffix || (target >= 1000 ? '+' : '');
+    const isDecimal = !Number.isInteger(target);
+    let start = null;
+    const dur = 1800;
+    const step = ts => {
+      if(!start) start = ts;
+      const progress = Math.min((ts-start)/dur, 1);
+      const eased = 1 - Math.pow(1-progress, 3);
+      const val = target * eased;
+      el.textContent = isDecimal
+        ? val.toFixed(1) + suffix
+        : Math.round(val).toLocaleString() + suffix;
+      if(progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  });
+}
+
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(e.isIntersecting) {
+      e.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Counters on load
+setTimeout(animateCounters, 600);
+
+// Feat card mouse glow
+document.querySelectorAll('.feat-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    card.style.setProperty('--mx', ((e.clientX-r.left)/r.width*100)+'%');
+    card.style.setProperty('--my', ((e.clientY-r.top)/r.height*100)+'%');
+  });
+});
+</script>
+</body>
+</html>
