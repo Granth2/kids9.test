@@ -371,15 +371,34 @@ svg.scene { width:100%; max-height:220px; display:block; }
   border-radius:32px;
   padding:80px 40px;
   text-align:center;
-  background:linear-gradient(135deg,rgba(56,189,248,.15),rgba(74,222,128,.1));
+  background:linear-gradient(135deg,rgba(0, 7, 10, 0.15),rgba(74,222,128,.1));
   border:1px solid rgba(56,189,248,.2);
   position:relative; z-index:1; overflow:hidden;
+}
+.comingsoon{
+  
+  font-family: 'Nunito', sans-serif;
+  font-size: clamp(42px, 7vw, 80px);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -2px;
+  margin-bottom: 24px;
+
+
+
+  background: linear-gradient(90deg, #38bdf8 0%, #4ade80 50%, #fbbf24 100%);
+  -webkit-background-clip: text;
+  color: transparent;
+  justify-content: center;   /* horizontal center */
+  align-items: center;       /* vertical center */
+  text-align: center;
+
 }
 .cta::before {
   content:"";
   position:absolute;
   top:-100px; left:50%; transform:translateX(-50%);
-  width:600px; height:600px;
+  width:600px; height: 200px;
   border-radius:50%;
   background:radial-gradient(circle,rgba(56,189,248,.12),transparent 70%);
   pointer-events:none;
@@ -440,12 +459,12 @@ footer strong { color:#475569; }
 <header>
   <div class="logo">Kids9</div>
   <nav>
-    <a href="#features">Features</a>
+    <!-- <!-- <a href="#features">Features</a>
     <a href="#how">How it works</a>
     <a href="#about">About</a>
     <a href="#contact" class="nav-cta">Get Started</a>
-  </nav>
-</header>
+  </nav> -->
+</header> -->
 
 <!-- HERO -->
 <section class="hero">
@@ -456,8 +475,8 @@ footer strong { color:#475569; }
   <p>Kids9 tracks school buses and vans in real-time so parents always know where their child is — and schools can ensure every student gets home safe.</p>
 
   <div class="hero-btns">
-    <button class="btn-primary">Get Started Free</button>
-    <button class="btn-ghost">See How It Works</button>
+    <!-- <button class="btn-primary">Get Started Free</button>
+    <button class="btn-ghost">See How It Works</button> -->
   </div>
 
   <div class="stats">
@@ -662,9 +681,9 @@ footer strong { color:#475569; }
       <h2>We Make Every<br>School Run Safe</h2>
       <p>Kids9 was built by parents, for parents. We know the anxiety of waiting for your child to come home — so we built a system that eliminates it entirely.</p>
       <p>By combining GPS hardware, a cloud platform, and a parent-first mobile app, we give schools full transparency and parents total peace of mind.</p>
-      <button class="btn-primary" style="margin-top:20px;font-size:15px;padding:12px 28px">Learn Our Story →</button>
+      <!-- <button class="btn-primary" style="margin-top:20px;font-size:15px;padding:12px 28px">Learn Our Story →</button> -->
     </div>
-    <div class="about-visual reveal">
+    <!-- <div class="about-visual reveal">
       <div class="bus-card">
         <div class="bus-card-top">
           <div class="dot-live"></div>
@@ -679,8 +698,8 @@ footer strong { color:#475569; }
         <div class="route-line">
           <div class="route-dot" style="background:#38bdf8;animation:pulse 1.5s infinite"></div>
           <span class="route-label" style="color:#38bdf8">Koramangala Stop ← <em>Now</em></span>
-        </div>
-        <div class="route-connector" style="margin-left:5px;background:rgba(100,116,139,.3)"></div>
+        </div> -->
+        <!-- <div class="route-connector" style="margin-left:5px;background:rgba(100,116,139,.3)"></div>
         <div class="route-line">
           <div class="route-dot" style="background:#475569"></div>
           <span class="route-label" style="color:#475569">HSR Layout Drop</span>
@@ -689,7 +708,7 @@ footer strong { color:#475569; }
         <div class="eta-bar">
           <span>Arriving at your stop</span>
           <strong>8 min</strong>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -700,11 +719,14 @@ footer strong { color:#475569; }
   <h2>Ready to Make Your<br>School Safer?</h2>
   <p>Join hundreds of schools already using Kids9 to give parents peace of mind and students a safe commute.</p>
   <div class="hero-btns">
-    <button class="btn-primary">Start Free Trial</button>
-    <button class="btn-ghost">Talk to Sales</button>
+    <!-- <button class="btn-primary">Start Free Trial</button>
+    <button class="btn-ghost">Talk to Sales</button> -->
   </div>
 </section>
 
+<section class="comingsoon"> 
+  <h1>Something Amazing<br><span>Is Coming Soon</span></h1>
+</section>
 <footer>
   <strong>Kids9</strong> — Smart School Transport &nbsp;·&nbsp; © 2026 All rights reserved &nbsp;·&nbsp; Made with ❤️ for every child's safety
 </footer>
